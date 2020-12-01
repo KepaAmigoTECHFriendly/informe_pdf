@@ -1,0 +1,111 @@
+---
+header-includes:
+    - \usepackage{fancyhdr}
+    -  \usepackage{pdflscape}
+output: pdf_document
+sansfont: Calibri
+always_allow_html: true
+geometry: "left=1cm,right=0cm,top=0cm,bottom=4cm"
+params:
+  df1: NA
+  df2: NA
+  df3: NA
+  df4: NA
+  df5: NA
+  c: NA
+  Mc: NA
+  Mp: NA
+---
+
+\pagenumbering{arabic}
+\addtolength{\headheight}{2.2cm}
+\pagestyle{fancyplain} 
+\lhead{\includegraphics[height=1cm]{/srv/shiny-server/AMB/www/img/AMB_logo.png}} 
+\renewcommand{\headrulewidth}{0pt}
+
+\setlength{\leftskip}{4.75cm}
+
+## INFORME MAPA OCUPACIONAL AMB
+
+\setlength{\leftskip}{0cm}
+![]("graf1.png"){width=370px}![]("graf2.png"){width=370px}
+\leavevmode\newline
+![]("graf3.png"){width=370px}![]("graf4.png"){width=370px}
+\newpage
+\setlength{\leftskip}{-1cm}
+![]("graf5.png"){width=400px}![]("graf6.png"){width=400px}
+\leavevmode\newline
+![]("graf7.png"){width=410px}![]("graf8.png"){width=410px}
+
+
+\newpage
+\setlength{\leftskip}{-0.5cm}
+
+```{r setup, include=FALSE, echo=FALSE}
+knitr::opts_chunk$set(root.dir = getwd(),message = FALSE)
+```
+
+#### Taula dades per periode
+```{r,echo=FALSE}
+# Tabla gráficos 1 y 2
+#\begin{landscape}
+library(knitr)
+library(kableExtra)
+df_municipio <- params$df1
+df_agrup <- params$df2
+
+df_municipio$Territori <- rep(params$Mp,nrow(df_municipio))
+df_agrup$Territori <- ifelse(params$c != "Un altre municipi",params$c,params$Mc)
+
+df_total <- rbind(df_municipio,df_agrup)
+df_total[sapply(df_total, is.infinite)] <- 0
+df_total[sapply(df_total, is.nan)] <- 0
+
+df_total <- df_total[,c(12,6,1,2,3,4,5,7,8,9,10,11)]
+
+knitr::kable(df_total) %>% kable_styling(bootstrap_options = "striped", full_width = F, position = "left", font_size = 7)
+```
+
+#### Taula dades per CCO
+```{r,echo=FALSE, out.width="400px"}
+#\lhead{\includegraphics[height=1cm]{/srv/shiny-server/AMB/www/img/AMB_logo.png}} 
+#\lhead{\includegraphics[height=1cm]{E:/KEPA/KEPA2/Proyectos/AMB/AMB_shiny/www/img/AMB_logo.png}}
+#\lhead{\includegraphics[height=1cm]{C:/TechFriendly/AMB/AMB_shiny BBDD/www/img/AMB_logo.png}}
+#```{r setup, include=FALSE, echo=FALSE}
+#knitr::opts_chunk$set(root.dir = getwd())
+#```
+# Tabla gráficos 3 y 4
+#\end{landscape}
+library(knitr)
+library(kableExtra)
+df_municipio <- params$df3
+df_agrup <- params$df4
+        
+df_municipio$Territori <- rep(params$Mp,nrow(df_municipio))
+df_agrup$Territori <- ifelse(params$c != "Un altre municipi",params$c,params$Mc)
+
+df_total <- rbind(df_municipio,df_agrup)
+df_total[sapply(df_total, is.infinite)] <- 0
+df_total[sapply(df_total, is.nan)] <- 0
+
+#df_total <- df_total[,c(12,6,1,2,3,4,5,7,8,9,10,11)]
+#df_total[,c(8,9,10,11,12)] <- round(df_total[,c(8,9,10,11,12)],2)
+df_total <- df_total[,c(12,6,1,2,3,4,5,7,8,9,10,11)]
+
+knitr::kable(df_total) %>% kable_styling(bootstrap_options = "striped", full_width = F, position = "left", font_size = 7)
+```
+
+
+#### Taula dades TOP 10 ocupació per nombre contractes
+```{r,echo=FALSE}
+# Tabla gráficos 7 y 8
+library(knitr)
+df <- params$df5
+        
+df[sapply(df, is.infinite)] <- 0
+df[sapply(df, is.nan)] <- 0
+
+df <- df[,c(6,3,4,5)]
+
+knitr::kable(df)
+```
